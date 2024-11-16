@@ -7,6 +7,8 @@ interface UnionContextType {
   setSelectedNoggle: (noggle: number | null) => void;
   vows: string;
   setVows: (vows: string) => void;
+  eternalToken: string;
+  setEternalToken: (token: string) => void;
 }
 
 const UnionContext = createContext<UnionContextType | undefined>(undefined);
@@ -14,6 +16,7 @@ const UnionContext = createContext<UnionContextType | undefined>(undefined);
 export function UnionProvider({ children }: { children: ReactNode }) {
   const [selectedNoggle, setSelectedNoggle] = useState<number | null>(null);
   const [vows, setVows] = useState<string>("");
+  const [eternalToken, setEternalToken] = useState<string>("");
 
   return (
     <UnionContext.Provider
@@ -22,6 +25,8 @@ export function UnionProvider({ children }: { children: ReactNode }) {
         setSelectedNoggle,
         vows,
         setVows,
+        eternalToken,
+        setEternalToken,
       }}
     >
       {children}

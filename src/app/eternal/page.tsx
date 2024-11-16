@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
+import { Input } from "@/components/ui/input";
 export default function Component() {
   const router = useRouter();
-  const { vows, selectedNoggle } = useUnion();
+  const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
   useEffect(() => {
     if (!selectedNoggle || !vows) {
@@ -49,26 +50,36 @@ export default function Component() {
 
           {/* Content */}
           <div className="space-y-8 flex-1 flex flex-col">
-            <div>
-              <div className="whitespace-pre-wrap">{vows}</div>
-              <div className="mx-auto w-64 mt-4 h-48 border-4 border-black flex items-center justify-center rounded-lg">
-                <Image
-                  src={`/noggles/noogles-${selectedNoggle}.png`}
-                  alt={`Noggle ${selectedNoggle}`}
-                  width={256}
-                  height={256}
-                />
+            <h1 className="text-2xl font-bold">Create your Eternal Token</h1>
+            <div className="space-y-2">
+              <label className="font-mono text-sm">Eternal Token</label>
+              <Input
+                className="border-black"
+                value={eternalToken}
+                onChange={(e) => {
+                  // Remove spaces and only allow alphanumeric + symbols
+                  const sanitized = e.target.value.replace(/\s+/g, "");
+                  setEternalToken(sanitized);
+                }}
+                placeholder="Enter something meaningful (no spaces)"
+              />
+              <div className="flex flex-center text-xs text-zinc-600">
+                Only letters, numbers, or symbols. No spaces allowed.
               </div>
             </div>
             {/* Bottom text with separator */}
             <div className="space-y-4">
               <div className="border-t-2 border-gray-200"></div>
               <p className="text-zinc-600 font-mono text-sm">
-                Take a moment to review your proposal. Make sure your vows and
-                nougles selection are just right. If you need to make any
-                changes, you can edit your vows or choose a different noggles.
-                Once you’re happy with everything, click Create Eternal Token →
-                to proceed.{" "}
+                Your Eternal Token is a unique key that seals your proposal
+                forever. Enter something meaningful, like a special date, a
+                word, or even an inside joke, and we’ll create a magical link
+                just for you.
+              </p>
+              <p className="text-zinc-600 font-mono text-sm">
+                Your Eternal Token is unique and essential—it’s the key to your
+                proposal’s magic. Don’t lose it, and make sure to save it
+                somewhere safe!{" "}
               </p>
             </div>
           </div>
@@ -76,9 +87,19 @@ export default function Component() {
         <div className="flex justify-center mt-8">
           <Button
             className="bg-red-500 text-white"
-            onClick={() => router.push("/eternal")}
+            onClick={async () =>
+              await proposeUnion
+                .mutateAsync({
+                  tokenId: selectedNoggle,
+                  vow: vows,
+                  message: "I love you",
+                })
+                .then(() => {
+                  router.push("/proposal-summary");
+                })
+            }
           >
-            Create Eternal Token
+            Seal the Deal
           </Button>
         </div>
       </main>

@@ -4,11 +4,20 @@ import { Button } from "@/components/ui/button";
 import { usePrivadoChainStatus } from "@/hooks/usePrivado";
 import { PrivadoUrl } from "@/lib/privado";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Component() {
   const privadoChain = usePrivadoChainStatus();
-
+  const [isOpened, setIsOpened] = useState(false);
   console.log("privadoChainStatus", privadoChain.data);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (privadoChain.data === true) {
+      router.push("/verify/success");
+    }
+  }, [privadoChain.data]);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -47,12 +56,20 @@ export default function Component() {
             {/* Center button vertically */}
             <div className="flex-1 flex items-center justify-center">
               <Button
-                className="bg-pink-500 hover:bg-pink-600 text-white font-mono px-8 py-6 text-lg"
+                className={`${
+                  isOpened
+                    ? "bg-black hover:bg-zinc-800"
+                    : "bg-pink-500 hover:bg-pink-600"
+                } text-white font-mono px-8 py-6 text-lg`}
                 onClick={() => {
-                  window.open(PrivadoUrl, "_blank");
+                  if (!isOpened) {
+                    setIsOpened(true);
+                    window.open(PrivadoUrl, "_blank");
+                  }
+                  privadoChain.refetch();
                 }}
               >
-                Let's Do This →
+                {isOpened ? "See If I’m Verified" : "Let's Do This →"}
               </Button>
             </div>
 

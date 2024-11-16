@@ -4,18 +4,23 @@ import { Button } from "@/components/ui/button";
 import { usePrivadoChainStatus } from "@/hooks/usePrivado";
 import { getPrivadoUrl } from "@/lib/privado";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function VerifyPageComponent() {
+export default function VerifyPageComponent({ isWife = false }) {
   const privadoChain = usePrivadoChainStatus();
   const [isOpened, setIsOpened] = useState(false);
   console.log("privadoChainStatus", privadoChain.data);
   const router = useRouter();
+  const { unionId } = useParams();
 
   useEffect(() => {
     if (privadoChain.data === true) {
-      router.push("/verify/success");
+      if (!isWife) {
+        router.push("/verify/success");
+      } else {
+        router.push(`/${unionId}/verify/success`);
+      }
     }
   }, [privadoChain.data]);
 

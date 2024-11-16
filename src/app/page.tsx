@@ -10,7 +10,7 @@ function App() {
 
   const { address: walletAddress, isConnected: isLoggedIn } = useAccount();
   const { connect: login, connectors } = useConnect();
-  const { disconnect: logout } = useDisconnect();
+  const { disconnectAsync: logout } = useDisconnect();
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -30,9 +30,9 @@ function App() {
           <Button
             variant="secondary"
             className="bg-zinc-800 text-white hover:bg-zinc-700"
-            onClick={() => {
+            onClick={async () => {
               if (isLoggedIn) {
-                logout();
+                await logout();
               } else {
                 login({
                   connector: connectors[0],

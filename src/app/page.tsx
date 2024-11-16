@@ -13,6 +13,7 @@ import { Web3Auth } from "@web3auth/modal";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID;
 const walletConnectProjectId =
@@ -297,8 +298,16 @@ function App() {
           <p className="text-zinc-600">
             Bring your story to life by creating something unique—together.
           </p>
-          <Button className="bg-pink-500 hover:bg-pink-600 text-white font-mono">
-            Craft a Union →
+          <Button
+            className="bg-pink-500 hover:bg-pink-600 text-white font-mono"
+            onClick={() => {
+              if (!loggedIn) {
+                login();
+              }
+            }}
+            asChild
+          >
+            <Link href={loggedIn ? "/verify" : "#"}>Craft a Union →</Link>
           </Button>
         </div>
 

@@ -27,10 +27,11 @@ export const useCivilRegistryContract = () => {
       tokenId: number;
       vow: string;
       message: string;
-    }): Promise<void> => {
+    }): Promise<string> => {
       const secretHash = keccak256(toHex(message));
       const tx = await contract.write.proposeUnion([tokenId, vow, secretHash]);
       await publicClient!.waitForTransactionReceipt({ hash: tx! });
+      return tx;
     },
   });
 
@@ -55,15 +56,6 @@ export const useCivilRegistryContract = () => {
       await publicClient!.waitForTransactionReceipt({ hash: tx! });
     },
   });
-
-  const unionSecret = (unionId: number) => {
-    return useQuery({
-      queryKey: ["unionSecret", unionId],
-      queryFn: async () => {
-        return await contract.read.unions([unionId]);
-      },
-    });
-  };
 
   return {
     contract,

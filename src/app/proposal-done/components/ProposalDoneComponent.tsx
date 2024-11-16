@@ -9,17 +9,11 @@ import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
 import { useSubgraph } from "@/hooks/useSubgraph";
-export default function ProposalDoneComponent({ isWife = false }) {
-  const router = useRouter();
-  const { unionId } = useParams();
-  const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
-  const { proposeUnion } = useCivilRegistryContract();
-  useEffect(() => {
-    if (!selectedNoggle || !vows) {
-      router.push(isWife ? `/${unionId}/noggles` : "/noggles");
-    }
-  }, [selectedNoggle, vows]);
-
+export default function ProposalDoneComponent(params: {
+  isWife?: boolean;
+  unionId?: string;
+}) {
+  const isWife = params.isWife || false;
   const { proposedUnions } = useSubgraph();
   const lastUnion = proposedUnions.data?.unionProposeds.reduce(
     (prev, current) => {
@@ -28,6 +22,23 @@ export default function ProposalDoneComponent({ isWife = false }) {
   );
 
   console.log("lastUnion", lastUnion);
+
+  let unionId;
+  if (params.unionId) {
+    unionId = params.unionId;
+  } else {
+    unionId = lastUnion?.unionId;
+  }
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const router = useRouter();
+
+  const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
+  const { proposeUnion } = useCivilRegistryContract();
+  useEffect(() => {
+    if (!selectedNoggle || !vows) {
+      router.push(isWife ? `/${unionId}/noggles` : "/noggles");
+    }
+  }, [selectedNoggle, vows]);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -65,8 +76,8 @@ export default function ProposalDoneComponent({ isWife = false }) {
                 Share this link with the other half ❤️ to accept the union.
               </p>
               <p className="text-center">
-                <Link href={`https://eternal.noogles.xyz/${eternalToken}`}>
-                  https://eternal.noogles.xyz/{eternalToken}
+                <Link href={`${baseUrl}/${unionId}`}>
+                  {baseUrl}/{unionId}
                 </Link>
               </p>
               <div>
@@ -75,7 +86,7 @@ export default function ProposalDoneComponent({ isWife = false }) {
                     className="bg-black text-white"
                     onClick={() => {
                       window.open(
-                        `https://blockscout.noogles.xyz/tx/${eternalToken}`,
+                        `https://scroll-sepolia.blockscout.com/tx/${lastUnion?.transactionHash}`,
                         "_blank"
                       );
                     }}
@@ -85,10 +96,7 @@ export default function ProposalDoneComponent({ isWife = false }) {
                   <Button
                     className="bg-black text-white"
                     onClick={() => {
-                      window.open(
-                        `https://eternal.noogles.xyz/${eternalToken}`,
-                        "_blank"
-                      );
+                      window.open(`${baseUrl}/${unionId}`, "_blank");
                     }}
                   >
                     View Union
@@ -96,9 +104,7 @@ export default function ProposalDoneComponent({ isWife = false }) {
                   <Button
                     className="bg-red-500 text-white"
                     onClick={() => {
-                      navigator.clipboard.writeText(
-                        `https://eternal.noogles.xyz/${eternalToken}`
-                      );
+                      navigator.clipboard.writeText(`${baseUrl}/${unionId}`);
                     }}
                   >
                     Share The Love
@@ -126,7 +132,7 @@ export default function ProposalDoneComponent({ isWife = false }) {
                   vow: vows,
                   message: eternalToken,
                 })
-                .then(() => {
+                .then((tx) => {
                   router.push("/proposal-summary");
                 })
             }

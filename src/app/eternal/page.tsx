@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
-export default function Component() {
+export default function EternalPage() {
   const router = useRouter();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();

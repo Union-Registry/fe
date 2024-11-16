@@ -1,7 +1,5 @@
 "use client";
 
-import { Textarea } from "@/components/ui/textarea";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
@@ -55,20 +53,55 @@ export default function EternalPage() {
               <p className="text-center">
                 Share this link with the other half ❤️ to accept the union.
               </p>
-            </div>
-            {/* Bottom text with separator */}
-            <div className="space-y-4">
-              <div className="border-t-2 border-gray-200"></div>
-              <p className="text-zinc-600 font-mono text-sm">
-                Way to go! Your proposal is now sealed and ready to share with
-                your special someone. Copy the link below to send them, or open
-                it yourself to admire your masterpiece!
+              <p className="text-center">
+                <Link href={`https://eternal.noogles.xyz/${eternalToken}`}>
+                  https://eternal.noogles.xyz/{eternalToken}
+                </Link>
               </p>
-              <p>
-                <Link
-                  href={`https://eternal.noogles.xyz/${eternalToken}`}
-                ></Link>
-              </p>
+              <div>
+                <div className="flex gap-4 justify-center">
+                  <Button
+                    className="bg-black text-white"
+                    onClick={() => {
+                      window.open(
+                        `https://blockscout.noogles.xyz/tx/${eternalToken}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    Link to Blockscout
+                  </Button>
+                  <Button
+                    className="bg-black text-white"
+                    onClick={() => {
+                      window.open(
+                        `https://eternal.noogles.xyz/${eternalToken}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    View Union
+                  </Button>
+                  <Button
+                    className="bg-red-500 text-white"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `https://eternal.noogles.xyz/${eternalToken}`
+                      );
+                    }}
+                  >
+                    Share The Love
+                  </Button>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="border-t-2 border-gray-200"></div>
+                <p className="text-zinc-600 font-mono text-sm">
+                  Way to go! Your proposal is now sealed and ready to share with
+                  your special someone. Copy the link below to send them, or
+                  open it yourself to admire your masterpiece!
+                </p>
+              </div>
             </div>
           </div>
         </div>

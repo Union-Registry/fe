@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
 export default function EternalPage() {
   const router = useRouter();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (!selectedNoggle || !vows) {
       router.push("/noggles");
@@ -86,18 +87,23 @@ export default function EternalPage() {
         </div>
         <div className="flex justify-center mt-8">
           <Button
-            className="bg-red-500 text-white"
-            onClick={async () =>
-              await proposeUnion
-                .mutateAsync({
+            className={`${isLoading ? "bg-red-300" : "bg-red-500"} text-white`}
+            onClick={async () => {
+              try {
+                setIsLoading(true);
+                await proposeUnion.mutateAsync({
                   tokenId: selectedNoggle,
                   vow: vows,
                   message: "I love you",
-                })
-                .then(() => {
-                  router.push("/proposal-done");
-                })
-            }
+                });
+                router.push("/proposal-done");
+              } catch (error) {
+                console.error(error);
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            disabled={isLoading}
           >
             Seal the Deal
           </Button>

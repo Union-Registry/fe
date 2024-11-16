@@ -3,18 +3,18 @@
 import { Textarea } from "@/components/ui/textarea";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 
-export default function VowsPageComponent() {
+export default function VowsPageComponent({ isWife = false }) {
   const router = useRouter();
   const { vows, setVows, selectedNoggle } = useUnion();
-
+  const { unionId } = useParams();
   useEffect(() => {
     if (!selectedNoggle) {
-      router.push("/noggles");
+      router.push(isWife ? `/${unionId}/noggles` : "/noggles");
     }
   }, [vows, selectedNoggle]);
 
@@ -73,7 +73,13 @@ export default function VowsPageComponent() {
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <Button onClick={() => router.push("/proposal-summary")}>
+          <Button
+            onClick={() =>
+              router.push(
+                isWife ? `/${unionId}/proposal-summary` : "/proposal-summary"
+              )
+            }
+          >
             Take a final look
           </Button>
         </div>

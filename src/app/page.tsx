@@ -4,10 +4,18 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useWallet } from "@/context/WalletContext";
+import { useAccount, useBalance } from "wagmi";
 
 function App() {
   const { walletAddress, isLoading, login, logout, isLoggedIn } = useWallet();
 
+  // Example Wagmi hooks
+
+  const { address } = useAccount();
+  const { data: balance } = useBalance({
+    address,
+  });
+  console.log("wagmiAddress", address);
   if (isLoading) {
     return <div className="container">Loading...</div>;
   }

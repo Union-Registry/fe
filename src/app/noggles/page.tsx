@@ -55,7 +55,7 @@ export default function NooglesPage() {
                   <div
                     key={id}
                     onClick={() => setSelectedNoggle(id)}
-                    className={`cursor-pointer p-4 rounded-lg border-4 transition-colors ${
+                    className={`cursor-pointer p-4 border-4 transition-colors ${
                       selectedNoggle === id ? "border-red-500" : "border-black"
                     }`}
                   >

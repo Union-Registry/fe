@@ -1,20 +1,17 @@
 "use client";
 
-import { Textarea } from "@/components/ui/textarea";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
 export default function EternalPage() {
   const router = useRouter();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
-  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (!selectedNoggle || !vows) {
       router.push("/noggles");
@@ -51,59 +48,77 @@ export default function EternalPage() {
 
           {/* Content */}
           <div className="space-y-8 flex-1 flex flex-col">
-            <h1 className="text-2xl font-bold">Create your Eternal Token</h1>
-            <div className="space-y-2">
-              <label className="font-mono text-sm">Eternal Token</label>
-              <Input
-                className="border-black"
-                value={eternalToken}
-                onChange={(e) => {
-                  // Remove spaces and only allow alphanumeric + symbols
-                  const sanitized = e.target.value.replace(/\s+/g, "");
-                  setEternalToken(sanitized);
-                }}
-                placeholder="Enter something meaningful (no spaces)"
-              />
-              <div className="flex flex-center text-xs text-zinc-600">
-                Only letters, numbers, or symbols. No spaces allowed.
+            <h1 className="text-2xl font-bold">Your Proposal is Live! 🎉</h1>
+            <div className="space-y-4 text-sm">
+              <p className="text-center">
+                Share this link with the other half ❤️ to accept the union.
+              </p>
+              <p className="text-center">
+                <Link href={`https://eternal.noogles.xyz/${eternalToken}`}>
+                  https://eternal.noogles.xyz/{eternalToken}
+                </Link>
+              </p>
+              <div>
+                <div className="flex gap-4 justify-center">
+                  <Button
+                    className="bg-black text-white"
+                    onClick={() => {
+                      window.open(
+                        `https://blockscout.noogles.xyz/tx/${eternalToken}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    Link to Blockscout
+                  </Button>
+                  <Button
+                    className="bg-black text-white"
+                    onClick={() => {
+                      window.open(
+                        `https://eternal.noogles.xyz/${eternalToken}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    View Union
+                  </Button>
+                  <Button
+                    className="bg-red-500 text-white"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `https://eternal.noogles.xyz/${eternalToken}`
+                      );
+                    }}
+                  >
+                    Share The Love
+                  </Button>
+                </div>
               </div>
-            </div>
-            {/* Bottom text with separator */}
-            <div className="space-y-4">
-              <div className="border-t-2 border-gray-200"></div>
-              <p className="text-zinc-600 font-mono text-sm">
-                Your Eternal Token is a unique key that seals your proposal
-                forever. Enter something meaningful, like a special date, a
-                word, or even an inside joke, and we’ll create a magical link
-                just for you.
-              </p>
-              <p className="text-zinc-600 font-mono text-sm">
-                Your Eternal Token is unique and essential—it’s the key to your
-                proposal’s magic. Don’t lose it, and make sure to save it
-                somewhere safe!{" "}
-              </p>
+              <div className="space-y-4">
+                <div className="border-t-2 border-gray-200"></div>
+                <p className="text-zinc-600 font-mono text-sm">
+                  Way to go! Your proposal is now sealed and ready to share with
+                  your special someone. Copy the link below to send them, or
+                  open it yourself to admire your masterpiece!
+                </p>
+              </div>
             </div>
           </div>
         </div>
         <div className="flex justify-center mt-8">
           <Button
-            className={`${isLoading ? "bg-red-300" : "bg-red-500"} text-white`}
-            onClick={async () => {
-              try {
-                setIsLoading(true);
-                await proposeUnion.mutateAsync({
+            className="bg-red-500 text-white"
+            onClick={async () =>
+              await proposeUnion
+                .mutateAsync({
                   tokenId: selectedNoggle,
                   vow: vows,
                   message: "I love you",
-                });
-                router.push("/proposal-done");
-              } catch (error) {
-                console.error(error);
-              } finally {
-                setIsLoading(false);
-              }
-            }}
-            disabled={isLoading}
+                })
+                .then(() => {
+                  router.push("/proposal-summary");
+                })
+            }
           >
             Seal the Deal
           </Button>

@@ -1,2 +1,43 @@
-export const PrivadoUrl =
-  "https://wallet.privado.id/#eyJiYWNrVXJsIjoiaHR0cHM6Ly93ZWItd2FsbGV0LWRlbW8ucHJpdmFkby5pZD9zdWNjZXNzPWZhbHNlIiwiZmluaXNoVXJsIjoiaHR0cHM6Ly93ZWItd2FsbGV0LWRlbW8ucHJpdmFkby5pZD9zdWNjZXNzPXRydWUiLCJsb2dvVXJsIjoiaHR0cHM6Ly93ZWItd2FsbGV0LWRlbW8ucHJpdmFkby5pZC9pY29uLXZlcmlmaWVyLnBuZyIsIm5hbWUiOiJQcml2YWRvIElEIFdlYiBXYWxsZXQgRGVtbyIsInprUXVlcmllcyI6W3siY2lyY3VpdElkIjoiY3JlZGVudGlhbEF0b21pY1F1ZXJ5VjNPbkNoYWluLWJldGEuMSIsImlkIjoxMDEsInF1ZXJ5Ijp7InByb29mVHlwZSI6IkJKSlNpZ25hdHVyZTIwMjEiLCJhbGxvd2VkSXNzdWVycyI6WyJkaWQ6aWRlbjM6cHJpdmFkbzptYWluOjJTY3JiRXV3OWpMWE1hcFczREVMWEJiRGNvNUVVUnpKWlJOMXRZajdMNyJdLCJjb250ZXh0IjoiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2FuaW1hLXByb3RvY29sL2NsYWltcy1wb2x5Z29uaWQvbWFpbi9zY2hlbWFzL2pzb24tbGQvcG9sLXYxLmpzb24tbGQiLCJ0eXBlIjoiQW5pbWFQcm9vZk9mTGlmZSIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7Imh1bWFuIjp7IiRlcSI6dHJ1ZX19fSwicGFyYW1zIjp7Im51bGxpZmllclNlc3Npb25JZCI6IjEwMSJ9fV0sInZlcmlmaWVyRGlkIjoiZGlkOmlkZW4zOmxpbmVhOnNlcG9saWE6MjhpdHpWTEJIbk1KYUJrbkZLOFB5YnhISlR2b0NCQjRyUnZuZ3A1QVBTIiwidHJhbnNhY3Rpb25EYXRhIjp7ImNvbnRyYWN0QWRkcmVzcyI6IjB4YTQzRTk4NUQ3YjViNjZGNEMyRTE3MkM5MjAzMkE0QWQ3ZDIzMDY1MiIsImZ1bmN0aW9uTmFtZSI6InN1Ym1pdFpLUFJlc3BvbnNlIiwibWV0aG9kSWQiOiIweGI2ODk2N2UyIiwiY2hhaW5JZCI6NTkxNDEsIm5ldHdvcmsiOiJsaW5lYS1zZXBvbGlhIn19";
+export const getPrivadoUrl = () => {
+  const request = {
+    backUrl: "https://web-wallet-demo.privado.id?success=false",
+    finishUrl: "https://web-wallet-demo.privado.id?success=true",
+    logoUrl:
+      "https://ipfs.io/ipfs/QmScrct8HbQk1sf5F2rjWCSy8XEJabgWJeCB6VYtCZdZn6",
+    name: "Privado ID - Union Registry",
+    zkQueries: [
+      {
+        circuitId: "credentialAtomicQueryV3OnChain-beta.1",
+        id: 101,
+        query: {
+          proofType: "BJJSignature2021",
+          allowedIssuers: [
+            "did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7",
+          ],
+          context:
+            "https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/pol-v1.json-ld",
+          type: "AnimaProofOfLife",
+          credentialSubject: {
+            human: {
+              $eq: true,
+            },
+          },
+        },
+        params: {
+          nullifierSessionId: "101",
+        },
+      },
+    ],
+    verifierDid:
+      "did:iden3:linea:sepolia:28itzVLBHnMJaBknFK8PybxHJTvoCBB4rRvngp5APS",
+    transactionData: {
+      contractAddress: "0xa43E985D7b5b66F4C2E172C92032A4Ad7d230652",
+      functionName: "submitZKPResponse",
+      methodId: "0xb68967e2",
+      chainId: 59141,
+      network: "linea-sepolia",
+    },
+  };
+
+  return `https://wallet.privado.id/#${btoa(JSON.stringify(request))}`;
+};

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { usePrivadoChainStatus } from "@/hooks/usePrivado";
-import { PrivadoUrl } from "@/lib/privado";
+import { getPrivadoUrl } from "@/lib/privado";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -64,7 +64,7 @@ export default function VerifyPageComponent() {
                 onClick={() => {
                   if (!isOpened) {
                     setIsOpened(true);
-                    window.open(PrivadoUrl, "_blank");
+                    window.open(getPrivadoUrl(), "_blank");
                   }
                   privadoChain.refetch();
                 }}

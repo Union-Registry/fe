@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 
-export default function NooglesPageComponent() {
+export default function NooglesPageComponent({ isWife = false }) {
   const router = useRouter();
   const { selectedNoggle, setSelectedNoggle } = useUnion();
-
+  const { unionId } = useParams();
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
       {/* Header */}
@@ -83,7 +83,7 @@ export default function NooglesPageComponent() {
         </div>
         <div className="flex justify-center mt-8">
           <Button
-            onClick={() => router.push("/vows")}
+            onClick={() => router.push(isWife ? `/${unionId}/vows` : "/vows")}
             className="w-1/3 ml-auto"
           >
             Craft your vows

@@ -45,6 +45,17 @@ Users can login with their own wallet or with socials, verify their humanity and
 | Civil Registry Implementation | 0x36db42c5649deec4efab6fd22006fe20b8427d3d | https://celo-alfajores.blockscout.com/address/0x36db42c5649deec4efab6fd22006fe20b8427d3d |
 | Civil Registry Proxy Admin | 0x0d969a06b6ac70cc142a95803f9533cb13031344 | https://celo-alfajores.blockscout.com/address/0x0d969a06b6ac70cc142a95803f9533cb13031344 |
 
+### Polygon Amoy 
+
+| Name | Address | Link |
+| --- | --- | --- |
+| UnionRings | 0x5533e0dfb8205e4930cdee0333ef389c04e4decc | https://amoy.polygonscan.com/address/0x5533e0dfb8205e4930cdee0333ef389c04e4decc |
+| UnionRings Proxy | 0xfe1ee0b467589cc491df494db3ee3c8faf219889 | https://amoy.polygonscan.com/address/0xfe1ee0b467589cc491df494db3ee3c8faf219889 |
+| UnionRings ProxyAdmin | 0x2c9c2be1536639aaa7a9971ed64d3c600a4efeb8 | https://amoy.polygonscan.com/address/0x2c9c2be1536639aaa7a9971ed64d3c600a4efeb8 |
+| UnionRegistry | 0x894049477aaa2a412957dcf0f1db718a7ecf42cf | https://amoy.polygonscan.com/address/0x894049477aaa2a412957dcf0f1db718a7ecf42cf |
+| UnionRegistry Proxy | 0x031f0da3d62302fedb5f23a539fb0ded62b64352 | https://amoy.polygonscan.com/address/0x031f0da3d62302fedb5f23a539fb0ded62b64352 |
+| UnionRegistry ProxyAdmin | 0x78e80f9cce14c00591e241d3d99262e59da3e748 | https://amoy.polygonscan.com/address/0x78e80f9cce14c00591e241d3d99262e59da3e748 |
+
 
 ## Getting Started
 

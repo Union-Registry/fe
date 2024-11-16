@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 
@@ -53,12 +54,15 @@ export default function VerifySuccess() {
             <div className="space-y-4">
               <div className="border-t-2 border-gray-200"></div>
               <p className="text-zinc-600 font-mono text-sm">
-                We promise this will only take a moment! We're using Privado to
-                make sure you're human (and not a robot). It's quick, secure,
-                and one-time only!
+                We promise this will only take a moment! We&apos;re using
+                Privado to make sure you&apos;re human (and not a robot).
+                It&apos;s quick, secure, and one-time only!
               </p>
             </div>
           </div>
+        </div>
+        <div className="flex justify-center mt-8">
+          <Button className="w-1/3 ml-auto">Dive Into the Fun</Button>
         </div>
       </main>
     </div>

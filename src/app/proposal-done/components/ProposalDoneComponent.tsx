@@ -124,7 +124,7 @@ export default function ProposalDoneComponent({ isWife = false }) {
                 .mutateAsync({
                   tokenId: selectedNoggle!,
                   vow: vows,
-                  message: "I love you",
+                  message: eternalToken,
                 })
                 .then(() => {
                   router.push("/proposal-summary");

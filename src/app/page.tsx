@@ -15,13 +15,11 @@ function App() {
   } = useAccount();
   const { connect: login, connectors } = useConnect();
   const { disconnect: logout } = useDisconnect();
-
+  console.log("isConnecting", isLoading);
+  console.log("isConnected", isLoggedIn);
   // Example Wagmi hooks
 
   console.log("wagmiAddress", walletAddress);
-  if (isLoading) {
-    return <div className="container">Loading...</div>;
-  }
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">

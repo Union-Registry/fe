@@ -1,7 +1,16 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useWallet } from "@/context/WalletContext";
 import Link from "next/link";
 
 export default function Component() {
+  const { walletAddress, isLoading } = useWallet();
+  console.log("walletAddressV", walletAddress);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
       {/* Header */}

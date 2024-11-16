@@ -87,7 +87,11 @@ export default function UnionCertificatePage() {
               <h2 className="text-lg font-bold border-b-2 border-black pb-2 mb-4 flex items-center gap-2">
                 The Other Half <span className="text-red-500">❤️</span>
               </h2>
-              <p>They'll Get to It… Eventually</p>
+
+              <p>
+                {union.data?.unionProposeds[0].union.vows[1] ??
+                  "They'll Get to It… Eventually"}
+              </p>
             </div>
 
             {/* Perfect Pair Section */}
@@ -98,17 +102,18 @@ export default function UnionCertificatePage() {
               <div className="flex justify-center my-4">
                 <div className="relative border-4 border-black p-4 w-64 h-32 flex items-center justify-center">
                   <Image
-                    src={`/noggles/noogles-${union.data?.unionProposeds[0]?.union?.ringIds[0]}.png`}
+                    // src={`/noggles/noogles-${union.data?.unionProposeds[0]?.union?.ringIds[0]}.png`}
+                    src={
+                      union.data?.unionProposeds[0].union.accepted
+                        ? "/noggles/noogles-f.png"
+                        : `/noggles/noogles-${union.data?.unionProposeds[0]?.union?.ringIds[0]}.png`
+                    }
                     alt={`Noggle ${union.data?.unionProposeds[0]?.union?.ringIds[0]}`}
                     width={256}
                     height={256}
                   />
                 </div>
               </div>
-              <p className="text-center">
-                {union.data?.unionProposeds[0].union.vows[1] ??
-                  "Still Waiting to Complete the Look!"}
-              </p>
             </div>
 
             {/* Signature Section */}
@@ -165,7 +170,13 @@ export default function UnionCertificatePage() {
                         : "Do You Accept?"}
                     </Button>
                   ) : (
-                    <p className="text-center">{secondUnionAddress}</p>
+                    <p className="text-sm text-zinc-600 font-mono mt-2">
+                      Wallet address
+                      <br />
+                      {secondUnionAddress.slice(0, 6) +
+                        "..." +
+                        secondUnionAddress.slice(-4)}
+                    </p>
                   )}
                 </div>
               </div>

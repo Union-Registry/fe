@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useWallet } from "@/context/WalletContext";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 
 export default function Component() {
-  const { walletAddress, isLoading } = useWallet();
+  const { address: walletAddress, isConnected: isLoading } = useAccount();
+
   console.log("walletAddressV", walletAddress);
   if (isLoading) {
     return <div>Loading...</div>;

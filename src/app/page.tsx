@@ -3,19 +3,22 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { useWallet } from "@/context/WalletContext";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 function App() {
-  const { walletAddress, isLoading, login, logout, isLoggedIn } = useWallet();
+  // const { walletAddress, isLoading, login, logout, isLoggedIn } = useWallet();
+
+  const {
+    address: walletAddress,
+    isConnecting: isLoading,
+    isConnected: isLoggedIn,
+  } = useAccount();
+  const { connect: login } = useConnect();
+  const { disconnect: logout } = useDisconnect();
 
   // Example Wagmi hooks
 
-  const { address } = useAccount();
-  const { data: balance } = useBalance({
-    address,
-  });
-  console.log("wagmiAddress", address);
+  console.log("wagmiAddress", walletAddress);
   if (isLoading) {
     return <div className="container">Loading...</div>;
   }
@@ -38,7 +41,13 @@ function App() {
           <Button
             variant="secondary"
             className="bg-zinc-800 text-white hover:bg-zinc-700"
-            onClick={isLoggedIn ? logout : login}
+            onClick={() => {
+              if (isLoggedIn) {
+                logout();
+              } else {
+                login();
+              }
+            }}
           >
             {isLoggedIn ? "Disconnect Wallet" : "Connect Wallet"}
           </Button>

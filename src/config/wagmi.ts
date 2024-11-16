@@ -1,9 +1,12 @@
-import { http, createConfig } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
+import { http, createConfig } from "wagmi";
+import { scrollSepolia } from "wagmi/chains";
+
+import Web3AuthConnectorInstance from "./Web3AuthConnectorInstance";
 
 export const config = createConfig({
-  chains: [sepolia],
+  chains: [scrollSepolia],
+  connectors: [Web3AuthConnectorInstance([scrollSepolia])],
   transports: {
-    [sepolia.id]: http('https://eth-sepolia.api.onfinality.io/public'),
+    [scrollSepolia.id]: http("https://sepolia-rpc.scroll.io"),
   },
-}) 
+});

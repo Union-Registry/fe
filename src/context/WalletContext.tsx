@@ -16,6 +16,7 @@ import {
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import { Web3Auth } from "@web3auth/modal";
 import { getDefaultExternalAdapters } from "@web3auth/default-evm-adapter";
+import { scrollSepolia } from "viem/chains";
 
 interface WalletContextType {
   walletAddress: string | null;
@@ -33,10 +34,10 @@ const walletConnectProjectId =
   process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!;
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: "0xaa36a7",
-  rpcTarget: "https://eth-sepolia.api.onfinality.io/public",
+  chainId: scrollSepolia.id,
+  rpcTarget: "https://sepolia-rpc.scroll.io",
   displayName: "Ethereum Sepolia Testnet",
-  blockExplorerUrl: "https://sepolia.etherscan.io",
+  blockExplorerUrl: "https://scroll-sepolia.blockscout.com",
   ticker: "ETH",
   tickerName: "Ethereum",
   logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
@@ -206,10 +207,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useWallet() {
-  const context = useContext(WalletContext);
-  if (context === undefined) {
-    throw new Error("useWallet must be used within a WalletProvider");
-  }
-  return context;
-}
+// export function useWallet() {
+//   const context = useContext(WalletContext);
+//   if (context === undefined) {
+//     throw new Error("useWallet must be used within a WalletProvider");
+//   }
+//   return context;
+// }

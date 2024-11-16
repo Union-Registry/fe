@@ -22,6 +22,7 @@ const getViewChain = (provider: IProvider) => {
       return mainnet;
   }
 };
+onlyReport;
 
 const getChainId = async (provider: IProvider): Promise<any> => {
   try {

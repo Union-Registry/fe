@@ -69,7 +69,9 @@ export const useSubgraph = () => {
     enabled: !!address,
   });
 
-  const useUnionById = (unionId: string) => {
+  const useUnionById = (
+    unionId: string
+  ): QueryObserverResult<{ unionProposeds: UnionProposed[] }, unknown> => {
     return useQuery({
       queryKey: ["union", unionId],
       staleTime: 10 * 1000,
@@ -79,8 +81,7 @@ export const useSubgraph = () => {
           document: unionByIdQuery,
           variables: { unionId: Number(unionId) },
         });
-        console.log("result", result);
-        return result.unionProposed;
+        return result;
       },
       enabled: !!unionId,
     });

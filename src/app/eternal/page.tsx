@@ -95,7 +95,7 @@ export default function EternalPage() {
                   message: "I love you",
                 })
                 .then(() => {
-                  router.push("/proposal-summary");
+                  router.push("/proposal-done");
                 })
             }
           >

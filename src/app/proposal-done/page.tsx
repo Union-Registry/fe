@@ -1,17 +1,24 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { usePrivadoChainStatus } from "@/hooks/usePrivado";
-import { PrivadoUrl } from "@/lib/privado";
-import Image from "next/image";
+import { Textarea } from "@/components/ui/textarea";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useUnion } from "@/context/UnionContext";
-
-export default function NooglesPage() {
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useEffect } from "react";
+import { useCivilRegistryContract } from "@/hooks/useContract";
+import { Input } from "@/components/ui/input";
+export default function EternalPage() {
   const router = useRouter();
-  const { selectedNoggle, setSelectedNoggle } = useUnion();
+  const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
+  const { proposeUnion } = useCivilRegistryContract();
+  useEffect(() => {
+    if (!selectedNoggle || !vows) {
+      router.push("/noggles");
+    }
+  }, [selectedNoggle, vows]);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -43,53 +50,44 @@ export default function NooglesPage() {
 
           {/* Content */}
           <div className="space-y-8 flex-1 flex flex-col">
-            <h2 className="font-mono text-2xl font-bold">
-              Choose your perfect half-of-Nougles!{" "}
-            </h2>
-
-            {/* Center content vertically */}
-            <div className="flex-1 flex flex-col items-center justify-center">
-              {/* Grid of noggles */}
-              <div className="grid grid-cols-2 gap-6">
-                {[1, 2, 3, 4].map((id) => (
-                  <div
-                    key={id}
-                    onClick={() => setSelectedNoggle(id)}
-                    className={`cursor-pointer p-4 border-4 transition-colors ${
-                      selectedNoggle === id ? "border-red-500" : "border-black"
-                    }`}
-                  >
-                    <div className="w-48 h-32 flex items-center justify-center">
-                      <Image
-                        src={`/noggles/noogles-${id}.png`}
-                        alt={`Noggle ${id}`}
-                        width={256}
-                        height={256}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <h1 className="text-2xl font-bold">Your Proposal is Live! 🎉</h1>
+            <div className="space-y-4 text-sm">
+              <p className="text-center">
+                Share this link with the other half ❤️ to accept the union.
+              </p>
             </div>
-
             {/* Bottom text with separator */}
             <div className="space-y-4">
               <div className="border-t-2 border-gray-200"></div>
               <p className="text-zinc-600 font-mono text-sm">
-                It’s time to get creative! Choose your half of the sunglasses
-                that will represent you in this union. Your partner will pick
-                the other half, and together, you’ll craft a unique and
-                meaningful pair!{" "}
+                Way to go! Your proposal is now sealed and ready to share with
+                your special someone. Copy the link below to send them, or open
+                it yourself to admire your masterpiece!
+              </p>
+              <p>
+                <Link
+                  href={`https://eternal.noogles.xyz/${eternalToken}`}
+                ></Link>
               </p>
             </div>
           </div>
         </div>
         <div className="flex justify-center mt-8">
           <Button
-            onClick={() => router.push("/vows")}
-            className="w-1/3 ml-auto"
+            className="bg-red-500 text-white"
+            onClick={async () =>
+              await proposeUnion
+                .mutateAsync({
+                  tokenId: selectedNoggle,
+                  vow: vows,
+                  message: "I love you",
+                })
+                .then(() => {
+                  router.push("/proposal-summary");
+                })
+            }
           >
-            Craft your vows
+            Seal the Deal
           </Button>
         </div>
       </main>

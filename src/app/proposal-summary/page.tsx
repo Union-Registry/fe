@@ -51,7 +51,7 @@ export default function Component() {
           <div className="space-y-8 flex-1 flex flex-col">
             <div>
               <div className="whitespace-pre-wrap">{vows}</div>
-              <div className="mx-auto w-64 mt-4 h-48 border-4 border-black flex items-center justify-center rounded-lg">
+              <div className="mx-auto w-64 mt-4 h-48 border-4 border-black flex items-center justify-center ">
                 <Image
                   src={`/noggles/noogles-${selectedNoggle}.png`}
                   alt={`Noggle ${selectedNoggle}`}

@@ -1,12 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { usePrivadoChainStatus } from "@/hooks/usePrivado";
-import { PrivadoUrl } from "@/lib/privado";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Component() {
   const router = useRouter();

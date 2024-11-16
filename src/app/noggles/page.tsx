@@ -1,12 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { usePrivadoChainStatus } from "@/hooks/usePrivado";
-import { PrivadoUrl } from "@/lib/privado";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useUnion } from "@/context/UnionContext";
 
 export default function NooglesPage() {

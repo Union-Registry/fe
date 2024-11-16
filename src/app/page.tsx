@@ -58,7 +58,9 @@ function App() {
             className="bg-pink-500 hover:bg-pink-600 text-white font-mono"
             onClick={() => {
               if (!isLoggedIn) {
-                login();
+                login({
+                  connector: connectors[0],
+                });
               }
             }}
             asChild

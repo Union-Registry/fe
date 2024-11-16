@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
+import { useSubgraph } from "@/hooks/useSubgraph";
 export default function EternalPage() {
   const router = useRouter();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
@@ -17,6 +18,15 @@ export default function EternalPage() {
       router.push("/noggles");
     }
   }, [selectedNoggle, vows]);
+
+  const { proposedUnions } = useSubgraph();
+  const lastUnion = proposedUnions.data?.unionProposeds.reduce(
+    (prev, current) => {
+      return Number(prev.unionId) > Number(current.unionId) ? prev : current;
+    }
+  );
+
+  console.log("lastUnion", lastUnion);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">

@@ -1,6 +1,18 @@
 import { useAccount } from "wagmi";
 import { gql, request } from "graphql-request";
-import { useQuery } from "@tanstack/react-query";
+import { QueryObserverResult, useQuery } from "@tanstack/react-query";
+
+interface UnionProposed {
+  unionId: string;
+  transactionHash: string;
+  union: {
+    participants: string[];
+    vows: string[];
+    ringIds: string[];
+    accepted: boolean;
+    attestationUid: string;
+  };
+}
 
 const graphQlUrl =
   "https://api.studio.thegraph.com/query/48819/union-registry-2/version/latest";
@@ -12,10 +24,21 @@ export const useSubgraph = () => {
       unionProposeds(where: { sender: $sender }) {
         unionId
         transactionHash
+        union {
+          participants
+          vows
+          ringIds
+          accepted
+          attestationUid
+        }
       }
     }
   `;
-  const proposedUnions = useQuery({
+
+  const proposedUnions: QueryObserverResult<
+    { unionProposeds: UnionProposed[] },
+    unknown
+  > = useQuery({
     queryKey: ["unionProposeds", address],
     staleTime: 10 * 1000,
     queryFn: async () => {

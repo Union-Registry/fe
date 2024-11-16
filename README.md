@@ -5,6 +5,7 @@ This project is comprised of three different repositories
 - Front-End https://github.com/Union-Registry/fe
 - Back-End https://github.com/Union-Registry/union-backend
 - Smart Contract https://github.com/Union-Registry/unions-contracts
+- Substream Implementation (The Graph) https://github.com/Union-Registry/union-backend-substreams
 
 This is a submission for the ETH Global Hackathon Bangkok
 

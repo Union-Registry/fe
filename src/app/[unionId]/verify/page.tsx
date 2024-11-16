@@ -3,5 +3,5 @@
 import VerifyPageComponent from "@/app/verify/Components/VerifyComponent";
 
 export default function VerifyPage() {
-  return <VerifyPageComponent />;
+  return <VerifyPageComponent isWife={true} />;
 }

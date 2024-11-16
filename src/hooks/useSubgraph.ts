@@ -16,12 +16,29 @@ interface UnionProposed {
 
 const graphQlUrl =
   "https://api.studio.thegraph.com/query/48819/union-registry-2/version/latest";
+
 export const useSubgraph = () => {
   const { address } = useAccount();
 
   const unionProposedQuery = gql`
     query ($sender: String!) {
       unionProposeds(where: { sender: $sender }) {
+        unionId
+        transactionHash
+        union {
+          participants
+          vows
+          ringIds
+          accepted
+          attestationUid
+        }
+      }
+    }
+  `;
+
+  const unionByIdQuery = gql`
+    query ($unionId: Int!) {
+      unionProposeds(where: { unionId: $unionId }) {
         unionId
         transactionHash
         union {
@@ -52,7 +69,25 @@ export const useSubgraph = () => {
     enabled: !!address,
   });
 
+  const useUnionById = (unionId: string) => {
+    return useQuery({
+      queryKey: ["union", unionId],
+      staleTime: 10 * 1000,
+      queryFn: async () => {
+        const result = await request({
+          url: graphQlUrl,
+          document: unionByIdQuery,
+          variables: { unionId: Number(unionId) },
+        });
+        console.log("result", result);
+        return result.unionProposed;
+      },
+      enabled: !!unionId,
+    });
+  };
+
   return {
     proposedUnions,
+    useUnionById,
   };
 };

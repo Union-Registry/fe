@@ -22,6 +22,29 @@ In addition members of a Union can customize their bond further using unique twi
 
 Users can login with their own wallet or with socials, verify their humanity and propose a union to another person using a secret code. The proposee enters the secret code, the union is made, Nouns are minted and a very special "Union Certificate" is made available to share with friends, family and your local government agency.
 
+## Contract Deployments
+
+### Scroll Sepolia
+| Name | Address | Link |
+| --- | --- | --- |
+| Union Registry Implementation  | 0x052f734680a741561ac25adce85de1089896b400 | https://scroll-sepolia.blockscout.com/address/0x052f734680a741561ac25adce85de1089896b400 |
+| Unions Rings Implementation | 0xccde38657c7f9fc2b3a6c802669c67df41ea4ec6 | https://scroll-sepolia.blockscout.com/address/0xccde38657c7f9fc2b3a6c802669c67df41ea4ec6 |
+| Union Rings Proxy | 0xaa41f84663158da8140ff1d9f1b69759448cb868 | https://scroll-sepolia.blockscout.com/address/0xaa41f84663158da8140ff1d9f1b69759448cb868 |
+| Union Registry Proxy  | 0xb6bfe8433ae90b6d0b9b25f5736a0600574b642c | https://scroll-sepolia.blockscout.com/address/0xb6bfe8433ae90b6d0b9b25f5736a0600574b642c |
+| Unions Rings ProxyAdmin | 0x4f7dc6b6f313f720e2db644d4b276e6c2fe3a1d2 | https://scroll-sepolia.blockscout.com/address/0x4f7dc6b6f313f720e2db644d4b276e6c2fe3a1d2 |
+| Union Registry ProxyAdmin | 0x51734668eab7bb91370618b9a45953ae74268014 | https://scroll-sepolia.blockscout.com/address/0x51734668eab7bb91370618b9a45953ae74268014 |
+
+### Celo Alfajores
+| Name | Address | Link |
+| --- | --- | --- |
+| Unions Rings  | 0x052f734680a741561ac25adce85de1089896b400 | https://celo-alfajores.blockscout.com/address/0x052f734680A741561ac25ADCe85DE1089896B400 |
+| Unions Rings Implementation | 0xb6bfe8433ae90b6d0b9b25f5736a0600574b642c | https://celo-alfajores.blockscout.com/address/0xb6bfe8433ae90b6d0b9b25f5736a0600574b642c |
+| Union Rings Proxy Admin | 0x51734668eab7bb91370618b9a45953ae74268014 | https://celo-alfajores.blockscout.com/address/0x51734668eab7bb91370618b9a45953ae74268014 |
+| Civil Registry  | 0x5a6c549b98a47a4fcc2f5fff313eb727c6428704 | https://celo-alfajores.blockscout.com/address/0x5a6c549b98a47a4fcc2f5fff313eb727c6428704 |
+| Civil Registry Implementation | 0x36db42c5649deec4efab6fd22006fe20b8427d3d | https://celo-alfajores.blockscout.com/address/0x36db42c5649deec4efab6fd22006fe20b8427d3d |
+| Civil Registry Proxy Admin | 0x0d969a06b6ac70cc142a95803f9533cb13031344 | https://celo-alfajores.blockscout.com/address/0x0d969a06b6ac70cc142a95803f9533cb13031344 |
+
+
 ## Getting Started
 
 First, run the development server:

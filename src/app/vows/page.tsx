@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { usePrivadoChainStatus } from "@/hooks/usePrivado";
 import { PrivadoUrl } from "@/lib/privado";
 import Link from "next/link";
@@ -8,16 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Component() {
-  const privadoChain = usePrivadoChainStatus();
-  const [isOpened, setIsOpened] = useState(false);
-  console.log("privadoChainStatus", privadoChain.data);
   const router = useRouter();
-
-  useEffect(() => {
-    if (privadoChain.data === true) {
-      router.push("/verify/success");
-    }
-  }, [privadoChain.data]);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -53,9 +45,12 @@ export default function Component() {
               Write Your Heart Out!
             </h2>
 
-            {/* Center button vertically */}
+            <div className="font-bold">Your Vows</div>
             <div className="flex-1 flex items-center justify-center">
-                <textarea 
+              <Textarea
+                placeholder="Pour your heart out here..."
+                className="w-full h-56"
+              />
             </div>
 
             {/* Bottom text with separator */}

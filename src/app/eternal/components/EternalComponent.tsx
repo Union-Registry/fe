@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
-export default function EternalPageComponent() {
+export default function EternalPageComponent({ isWife = false }) {
   const router = useRouter();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    if (!selectedNoggle || !vows) {
-      router.push("/noggles");
+    if (!isWife) {
+      if (!selectedNoggle || !vows) {
+        router.push("/noggles");
+      }
     }
   }, [selectedNoggle, vows]);
 

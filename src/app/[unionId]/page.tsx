@@ -6,7 +6,8 @@ import { useSubgraph } from "@/hooks/useSubgraph";
 import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function UnionCertificatePage() {
@@ -16,8 +17,7 @@ export default function UnionCertificatePage() {
   const { address } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnectAsync } = useDisconnect();
-
-  console.log("union", union.data);
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
       {/* Header */}
@@ -132,10 +132,16 @@ export default function UnionCertificatePage() {
                   <Button
                     className="bg-pink-500 hover:bg-pink-600 text-white mt-2"
                     onClick={async () => {
-                      if (address) {
-                        // await signUnion();
-                      } else {
+                      if (!address) {
                         connect({ connector: connectors[0] });
+                      } else if (
+                        union?.data?.unionProposeds[0].union.participants[0].toLowerCase() ===
+                        address?.toLowerCase()
+                      ) {
+                        console.log("Need The Other Half");
+                      } else {
+                        console.log("Do You Accept?");
+                        router.push(`/${unionId}/eternal`);
                       }
                     }}
                   >

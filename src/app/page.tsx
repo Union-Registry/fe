@@ -13,7 +13,7 @@ function App() {
     isConnecting: isLoading,
     isConnected: isLoggedIn,
   } = useAccount();
-  const { connect: login } = useConnect();
+  const { connect: login, connectors } = useConnect();
   const { disconnect: logout } = useDisconnect();
 
   // Example Wagmi hooks
@@ -45,7 +45,9 @@ function App() {
               if (isLoggedIn) {
                 logout();
               } else {
-                login();
+                login({
+                  connector: connectors[0],
+                });
               }
             }}
           >

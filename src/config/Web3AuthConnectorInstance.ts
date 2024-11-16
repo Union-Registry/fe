@@ -2,17 +2,12 @@
 import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
 import { Web3Auth } from "@web3auth/modal";
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
-import {
-  CHAIN_NAMESPACES,
-  WEB3AUTH_NETWORK,
-  WALLET_ADAPTERS,
-} from "@web3auth/base";
+import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK } from "@web3auth/base";
 import { Chain } from "wagmi/chains";
-import { WalletServicesPlugin } from "@web3auth/wallet-services-plugin";
+import { getDefaultExternalAdapters } from "@web3auth/default-evm-adapter";
 
 export default function Web3AuthConnectorInstance(chains: Chain[]) {
   // Create Web3Auth Instance
-  const name = "My App Name";
   const chainConfig = {
     chainNamespace: CHAIN_NAMESPACES.EIP155,
     chainId: "0x" + chains[0].id.toString(16),
@@ -27,50 +22,24 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
     config: { chainConfig },
   });
 
-  const web3AuthInstance = new Web3Auth({
+  const web3AuthOptions = {
     clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID!,
     chainConfig,
     privateKeyProvider,
-    uiConfig: {
-      appName: name,
-      loginMethodsOrder: ["github", "google"],
-      defaultLanguage: "en",
-      modalZIndex: "2147483647",
-      logoLight: "https://web3auth.io/images/web3authlog.png",
-      logoDark: "https://web3auth.io/images/web3authlogodark.png",
-      uxMode: "redirect",
-      mode: "light",
-    },
-    web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
-    enableLogging: true,
-  });
-
-  const walletServicesPlugin = new WalletServicesPlugin({
-    walletInitOptions: {
-      whiteLabel: {
-        showWidgetButton: true,
-      },
-    },
-  });
-  web3AuthInstance.addPlugin(walletServicesPlugin);
-
-  const modalConfig = {
-    [WALLET_ADAPTERS.AUTH]: {
-      label: "openlogin",
-      loginMethods: {
-        facebook: {
-          // it will hide the facebook option from the Web3Auth modal.
-          name: "facebook login",
-          showOnModal: false,
-        },
-      },
-      // setting it to false will hide all social login methods from modal.
-      showOnModal: true,
-    },
+    web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+    enableLogging: false,
   };
+  const web3AuthInstance = new Web3Auth(web3AuthOptions);
+
+  const adapters = getDefaultExternalAdapters({
+    options: web3AuthOptions,
+  });
+
+  adapters.forEach((adapter) => {
+    web3AuthInstance.configureAdapter(adapter);
+  });
 
   return Web3AuthConnector({
     web3AuthInstance,
-    modalConfig,
   });
 }

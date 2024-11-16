@@ -11,8 +11,9 @@ import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 export default function ProposalSummaryComponent({ isWife = false }) {
   const router = useRouter();
-  const { vows, selectedNoggle } = useUnion();
+  const { vows, selectedNoggle, eternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
+  const { acceptUnion } = useCivilRegistryContract();
   const { unionId } = useParams();
   useEffect(() => {
     if (!selectedNoggle || !vows) {
@@ -77,9 +78,25 @@ export default function ProposalSummaryComponent({ isWife = false }) {
         <div className="flex justify-center mt-8">
           <Button
             className="bg-red-500 text-white"
-            onClick={() =>
-              router.push(isWife ? `/${unionId}/eternal` : "/eternal")
-            }
+            onClick={() => {
+              if (isWife) {
+                if (!eternalToken) {
+                  router.push(`/${unionId}/eternal`);
+                }
+                acceptUnion
+                  .mutateAsync({
+                    unionid: parseInt(unionId as string),
+                    tokenId: selectedNoggle!,
+                    vow: vows,
+                    message: eternalToken,
+                  })
+                  .then(() => {
+                    router.push(`/${unionId}/proposal-done`);
+                  });
+              } else {
+                router.push(`/eternal`);
+              }
+            }}
           >
             Create Eternal Token
           </Button>

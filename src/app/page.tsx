@@ -8,18 +8,9 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 function App() {
   // const { walletAddress, isLoading, login, logout, isLoggedIn } = useWallet();
 
-  const {
-    address: walletAddress,
-    isConnecting: isLoading,
-    isConnected: isLoggedIn,
-  } = useAccount();
+  const { address: walletAddress, isConnected: isLoggedIn } = useAccount();
   const { connect: login, connectors } = useConnect();
   const { disconnect: logout } = useDisconnect();
-  console.log("isConnecting", isLoading);
-  console.log("isConnected", isLoggedIn);
-  // Example Wagmi hooks
-
-  console.log("wagmiAddress", walletAddress);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">

@@ -499,4 +499,4 @@ export const CivilRegistryAbi: Abi = [
     stateMutability: "view",
     type: "function",
   },
-] as const;
+];

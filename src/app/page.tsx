@@ -1,101 +1,252 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import {
+  IProvider,
+  WEB3AUTH_NETWORK,
+  CHAIN_NAMESPACES,
+  WALLET_ADAPTERS,
+} from "@web3auth/base";
+import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
+
+import { Web3Auth } from "@web3auth/modal";
+import { useEffect, useState } from "react";
+import RPC from "./rpcs/viemRpcs";
+
+const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID;
+const chainConfig = {
+  chainNamespace: CHAIN_NAMESPACES.EIP155,
+  chainId: "0xaa36a7",
+  rpcTarget: "https://eth-sepolia.api.onfinality.io/public",
+  displayName: "Ethereum Sepolia Testnet",
+  blockExplorerUrl: "https://sepolia.etherscan.io",
+  ticker: "ETH",
+  tickerName: "Ethereum",
+  logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+};
+
+function App() {
+  const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
+  const [provider, setProvider] = useState<IProvider | null>(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const initWeb3Auth = async () => {
+      try {
+        setIsLoading(true);
+
+        const privateKeyProvider = new EthereumPrivateKeyProvider({
+          config: { chainConfig },
+        });
+
+        const web3authInstance = new Web3Auth({
+          clientId,
+          web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+          chainConfig,
+          privateKeyProvider,
+        });
+
+        try {
+          await web3authInstance.initModal({
+            modalConfig: {
+              [WALLET_ADAPTERS.WALLET_CONNECT_V2]: {
+                label: "Wallet Connect V2",
+                loginMethods: {
+                  google: {
+                    name: "google",
+                    logoDark: "url to logo",
+                  },
+                  facebook: {
+                    name: "facebook",
+                    logoDark: "url to logo",
+                  },
+                },
+                showOnModal: true,
+              },
+            },
+          });
+          console.log("Modal initialized successfully");
+        } catch (modalError) {
+          console.error("Error initializing modal:", modalError);
+          throw modalError;
+        }
+
+        if (web3authInstance.connected) {
+          setProvider(web3authInstance.provider);
+          setLoggedIn(true);
+        }
+
+        setWeb3auth(web3authInstance);
+        setError(null);
+      } catch (err) {
+        console.error("Error during initialization:", err);
+        setError(
+          err instanceof Error
+            ? `Failed to initialize Web3Auth: ${err.message}`
+            : "Failed to initialize Web3Auth"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initWeb3Auth();
+  }, []);
+
+  const login = async () => {
+    if (!web3auth) {
+      setError("Web3Auth not initialized");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const web3authProvider = await web3auth.connect();
+      setProvider(web3authProvider);
+      setLoggedIn(true);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to login");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    if (!web3auth) {
+      setError("Web3Auth not initialized");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      await web3auth.logout();
+      setProvider(null);
+      setLoggedIn(false);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to logout");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getUserInfo = async () => {
+    if (!web3auth) {
+      setError("Web3Auth not initialized");
+      return;
+    }
+    try {
+      const user = await web3auth.getUserInfo();
+      console.log(user);
+      return user;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to get user info");
+      console.error(err);
+    }
+  };
+
+  const handleRPCCall = async (
+    operation: (provider: IProvider) => Promise<any>,
+    errorMessage: string
+  ) => {
+    if (!provider) {
+      setError("Provider not initialized");
+      return;
+    }
+    try {
+      const result = await operation(provider);
+      console.log(result);
+      return result;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : errorMessage);
+      console.error(err);
+    }
+  };
+
+  if (isLoading) {
+    return <div className="container">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="container">
+        <div className="error">Error: {error}</div>
+        {!web3auth && (
+          <button onClick={() => window.location.reload()} className="card">
+            Retry
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  const loggedInView = (
+    <div className="flex-container">
+      <button onClick={getUserInfo} className="card">
+        Get User Info
+      </button>
+      <button
+        onClick={() => handleRPCCall(RPC.getAccounts, "Failed to get accounts")}
+        className="card"
+      >
+        Get Accounts
+      </button>
+      <button
+        onClick={() => handleRPCCall(RPC.getBalance, "Failed to get balance")}
+        className="card"
+      >
+        Get Balance
+      </button>
+      <button
+        onClick={() => handleRPCCall(RPC.signMessage, "Failed to sign message")}
+        className="card"
+      >
+        Sign Message
+      </button>
+      <button
+        onClick={() =>
+          handleRPCCall(RPC.sendTransaction, "Failed to send transaction")
+        }
+        className="card"
+      >
+        Send Transaction
+      </button>
+      <button onClick={logout} className="card">
+        Log Out
+      </button>
+    </div>
+  );
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="container">
+      <h1 className="title">
+        <a
+          target="_blank"
+          href="https://web3auth.io/docs/sdk/pnp/web/modal"
+          rel="noreferrer"
+        >
+          Web3Auth
+        </a>
+        & NextJS Implementation
+      </h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <div className="grid">
+        {loggedIn ? (
+          loggedInView
+        ) : (
+          <button onClick={login} className="card">
+            Login
+          </button>
+        )}
+      </div>
+
+      <div id="console" style={{ whiteSpace: "pre-line" }}>
+        <p style={{ whiteSpace: "pre-line" }}></p>
+      </div>
     </div>
   );
 }
+
+export default App;

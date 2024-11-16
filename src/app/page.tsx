@@ -7,12 +7,15 @@ import {
   WALLET_ADAPTERS,
 } from "@web3auth/base";
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
-
+import { getDefaultExternalAdapters } from "@web3auth/default-evm-adapter";
 import { Web3Auth } from "@web3auth/modal";
 import { useEffect, useState } from "react";
 import RPC from "./rpcs/viemRpcs";
 
 const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID;
+const walletConnectProjectId =
+  process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
+console.log("walletConnectProjectId", walletConnectProjectId);
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
   chainId: "0xaa36a7",
@@ -45,24 +48,44 @@ function App() {
           web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
           chainConfig,
           privateKeyProvider,
+          uiConfig: {
+            loginMethodsOrder: ["google", "facebook"],
+            defaultLanguage: "en",
+          },
+        });
+
+        // Get adapters for external wallets
+        const adapters = await getDefaultExternalAdapters({
+          options: {
+            clientId,
+            web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+            chainConfig,
+            privateKeyProvider,
+          },
+        });
+
+        // Configure the adapters
+        adapters.forEach((adapter) => {
+          web3authInstance.configureAdapter(adapter);
         });
 
         try {
           await web3authInstance.initModal({
             modalConfig: {
               [WALLET_ADAPTERS.WALLET_CONNECT_V2]: {
-                label: "Wallet Connect V2",
-                loginMethods: {
-                  google: {
-                    name: "google",
-                    logoDark: "url to logo",
-                  },
-                  facebook: {
-                    name: "facebook",
-                    logoDark: "url to logo",
+                label: "wallet_connect",
+                showOnModal: true,
+                walletConnectInitOptions: {
+                  projectId: walletConnectProjectId as string,
+                  chains: ["0xaa36a7"], // Sepolia chainId
+                  optionalChains: ["0xaa36a7"],
+                  metadata: {
+                    name: "Web3Auth",
+                    description: "Web3Auth x WalletConnect",
+                    url: "https://web3auth.io",
+                    icons: ["https://web3auth.io/images/w3a-L-Favicon-1.svg"],
                   },
                 },
-                showOnModal: true,
               },
             },
           });
@@ -106,8 +129,10 @@ function App() {
       setLoggedIn(true);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to login");
-      console.error(err);
+      console.error("Error during login:", err);
+      setError(
+        err instanceof Error ? `Login failed: ${err.message}` : "Login failed"
+      );
     } finally {
       setIsLoading(false);
     }

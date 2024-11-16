@@ -7,6 +7,7 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { zeroAddress } from "viem";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
@@ -18,6 +19,13 @@ export default function UnionCertificatePage() {
   const { connect, connectors } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const router = useRouter();
+  console.log("unioooon", union);
+
+  const secondUnionAddress =
+    union?.data?.unionProposeds[0]?.union?.participants[1] === zeroAddress
+      ? null
+      : union?.data?.unionProposeds[0]?.union?.participants[1];
+
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
       {/* Header */}
@@ -97,7 +105,10 @@ export default function UnionCertificatePage() {
                   />
                 </div>
               </div>
-              <p className="text-center">Still Waiting to Complete the Look!</p>
+              <p className="text-center">
+                {union.data?.unionProposeds[0].union.vows[1] ??
+                  "Still Waiting to Complete the Look!"}
+              </p>
             </div>
 
             {/* Signature Section */}
@@ -129,29 +140,33 @@ export default function UnionCertificatePage() {
                   <p className="font-bold flex items-center gap-2">
                     The Other Half <span className="text-red-500">❤️</span>
                   </p>
-                  <Button
-                    className="bg-pink-500 hover:bg-pink-600 text-white mt-2"
-                    onClick={async () => {
-                      if (!address) {
-                        connect({ connector: connectors[0] });
-                      } else if (
-                        union?.data?.unionProposeds[0].union.participants[0].toLowerCase() ===
-                        address?.toLowerCase()
-                      ) {
-                        console.log("Need The Other Half");
-                      } else {
-                        console.log("Do You Accept?");
-                        router.push(`/${unionId}/eternal`);
-                      }
-                    }}
-                  >
-                    {!address
-                      ? "Connect Wallet to Sign"
-                      : union?.data?.unionProposeds[0].union.participants[0].toLowerCase() ===
-                        address?.toLowerCase()
-                      ? "Need The Other Half"
-                      : "Do You Accept?"}
-                  </Button>
+                  {!secondUnionAddress ? (
+                    <Button
+                      className="bg-pink-500 hover:bg-pink-600 text-white mt-2"
+                      onClick={async () => {
+                        if (!address) {
+                          connect({ connector: connectors[0] });
+                        } else if (
+                          union?.data?.unionProposeds[0].union.participants[0].toLowerCase() ===
+                          address?.toLowerCase()
+                        ) {
+                          console.log("Need The Other Half");
+                        } else {
+                          console.log("Do You Accept?");
+                          router.push(`/${unionId}/eternal`);
+                        }
+                      }}
+                    >
+                      {!address
+                        ? "Connect Wallet to Sign"
+                        : union?.data?.unionProposeds[0].union.participants[0].toLowerCase() ===
+                          address?.toLowerCase()
+                        ? "Need The Other Half"
+                        : "Do You Accept?"}
+                    </Button>
+                  ) : (
+                    <p className="text-center">{secondUnionAddress}</p>
+                  )}
                 </div>
               </div>
             </div>

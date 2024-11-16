@@ -32,6 +32,7 @@ export default function EternalPageComponent({ isWife = false }) {
       });
       if (messageHash === unionSecret) {
         toast.success("Union unlocked!");
+        router.push(`/${unionId}/verify`);
       } else {
         toast.error("Invalid Eternal Token");
       }
@@ -40,7 +41,7 @@ export default function EternalPageComponent({ isWife = false }) {
   useEffect(() => {
     if (!isWife) {
       if (!selectedNoggle || !vows) {
-        router.push("/noggles");
+        router.push(isWife ? `/${unionId}/noggles` : "/noggles");
       }
     }
   }, [selectedNoggle, vows]);
@@ -134,6 +135,7 @@ export default function EternalPageComponent({ isWife = false }) {
                     vow: vows,
                     message: eternalToken,
                   });
+
                   router.push("/proposal-done");
                 } catch (error) {
                   console.error(error);

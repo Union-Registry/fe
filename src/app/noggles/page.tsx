@@ -1,15 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { usePrivadoChainStatus } from "@/hooks/usePrivado";
+import { PrivadoUrl } from "@/lib/privado";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
+import { useEffect, useState } from "react";
 
-export default function VerifySuccess() {
-  const { address: walletAddress } = useAccount();
-
-  console.log("walletAddressV", walletAddress);
+export default function NooglesPage() {
+  const privadoChain = usePrivadoChainStatus();
+  const [isOpened, setIsOpened] = useState(false);
+  console.log("privadoChainStatus", privadoChain.data);
   const router = useRouter();
+  const [selectedNoggle, setSelectedNoggle] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -41,35 +45,46 @@ export default function VerifySuccess() {
 
           {/* Content */}
           <div className="space-y-8 flex-1 flex flex-col">
-            <h2 className="font-mono text-2xl font-bold">Well Done!</h2>
+            <h2 className="font-mono text-2xl font-bold">
+              Choose your perfect half-of-Nougles!{" "}
+            </h2>
 
-            {/* Center button vertically */}
-            <div className="flex-1 flex items-center justify-center font-bold">
-              You’re Verified!
-            </div>
-            <div className="">
-              Great job, human! You’ve successfully proven your humanity. Now
-              you’re all set to craft your union.
+            {/* Center content vertically */}
+            <div className="flex-1 flex flex-col items-center justify-center">
+              {/* Grid of noggles */}
+              <div className="grid grid-cols-2 gap-6">
+                {[1, 2, 3, 4].map((id) => (
+                  <div
+                    key={id}
+                    onClick={() => setSelectedNoggle(id)}
+                    className={`cursor-pointer p-4 rounded-lg border-4 transition-colors ${
+                      selectedNoggle === id ? "border-red-500" : "border-black"
+                    }`}
+                  >
+                    <div className="w-48 h-32 flex items-center justify-center">
+                      <Image
+                        src={`/noggles/noogles-${id}.png`}
+                        alt={`Noggle ${id}`}
+                        width={256}
+                        height={256}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Bottom text with separator */}
             <div className="space-y-4">
               <div className="border-t-2 border-gray-200"></div>
               <p className="text-zinc-600 font-mono text-sm">
-                We promise this will only take a moment! We&apos;re using
-                Privado to make sure you&apos;re human (and not a robot).
-                It&apos;s quick, secure, and one-time only!
+                It’s time to get creative! Choose your half of the sunglasses
+                that will represent you in this union. Your partner will pick
+                the other half, and together, you’ll craft a unique and
+                meaningful pair!{" "}
               </p>
             </div>
           </div>
-        </div>
-        <div className="flex justify-center mt-8">
-          <Button
-            onClick={() => router.push("/noggles")}
-            className="w-1/3 ml-auto"
-          >
-            Dive Into the Fun
-          </Button>
         </div>
       </main>
     </div>

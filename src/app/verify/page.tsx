@@ -59,7 +59,7 @@ export default function Component() {
                 className={`${
                   isOpened
                     ? "bg-black hover:bg-zinc-800"
-                    : "bg-pink-500 hover:bg-pink-600"
+                    : "bg-[#d53c5e] hover:bg-[#af1638]"
                 } text-white font-mono px-8 py-6 text-lg`}
                 onClick={() => {
                   if (!isOpened) {

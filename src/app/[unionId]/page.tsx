@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 export default function UnionCertificatePage() {
   const unionId = useParams().unionId;
   const { useUnionById } = useSubgraph();
-  const union = useUnionById(unionId[0]);
+  const union = useUnionById(unionId as string);
 
   console.log("union", union.data);
   return (
@@ -101,7 +101,14 @@ export default function UnionCertificatePage() {
                   <p className="text-sm text-zinc-600 font-mono mt-2">
                     Wallet address
                     <br />
-                    0xD9845...07d34
+                    {union?.data?.unionProposeds[0].union.participants[0].slice(
+                      0,
+                      6
+                    ) +
+                      "..." +
+                      union?.data?.unionProposeds[0].union.participants[0].slice(
+                        -4
+                      )}
                   </p>
                 </div>
                 <div>

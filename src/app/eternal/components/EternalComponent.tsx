@@ -129,11 +129,12 @@ export default function EternalPageComponent({ isWife = false }) {
               onClick={async () => {
                 try {
                   setIsLoading(true);
-                  await proposeUnion.mutateAsync({
+                  const tx = await proposeUnion.mutateAsync({
                     tokenId: selectedNoggle!,
                     vow: vows,
                     message: eternalToken,
                   });
+                  localStorage.setItem("proposalTx", tx);
                   router.push("/proposal-done");
                 } catch (error) {
                   console.error(error);

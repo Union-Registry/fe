@@ -14,6 +14,7 @@ export const useCivilRegistryContract = () => {
   const contract = getContract({
     address: CIVIL_REGISTRY_CONTRACT,
     abi: CivilRegistryAbi,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     client: walletClient?.data!,
   });
 

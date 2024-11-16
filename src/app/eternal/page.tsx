@@ -92,7 +92,7 @@ export default function EternalPage() {
               try {
                 setIsLoading(true);
                 await proposeUnion.mutateAsync({
-                  tokenId: selectedNoggle,
+                  tokenId: selectedNoggle!,
                   vow: vows,
                   message: "I love you",
                 });

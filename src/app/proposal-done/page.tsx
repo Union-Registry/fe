@@ -121,7 +121,7 @@ export default function EternalPage() {
             onClick={async () =>
               await proposeUnion
                 .mutateAsync({
-                  tokenId: selectedNoggle,
+                  tokenId: selectedNoggle!,
                   vow: vows,
                   message: "I love you",
                 })

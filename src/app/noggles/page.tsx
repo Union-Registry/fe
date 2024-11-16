@@ -9,9 +9,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function NooglesPage() {
-  const privadoChain = usePrivadoChainStatus();
-  const [isOpened, setIsOpened] = useState(false);
-  console.log("privadoChainStatus", privadoChain.data);
   const router = useRouter();
   const [selectedNoggle, setSelectedNoggle] = useState<number | null>(null);
 
@@ -85,6 +82,14 @@ export default function NooglesPage() {
               </p>
             </div>
           </div>
+        </div>
+        <div className="flex justify-center mt-8">
+          <Button
+            onClick={() => router.push("/vows")}
+            className="w-1/3 ml-auto"
+          >
+            Craft your vows
+          </Button>
         </div>
       </main>
     </div>

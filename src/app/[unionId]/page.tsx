@@ -7,11 +7,15 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function UnionCertificatePage() {
   const unionId = useParams().unionId;
   const { useUnionById } = useSubgraph();
   const union = useUnionById(unionId as string);
+  const { address } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { disconnectAsync } = useDisconnect();
 
   console.log("union", union.data);
   return (
@@ -33,8 +37,17 @@ export default function UnionCertificatePage() {
         <Button
           variant="secondary"
           className="bg-zinc-800 text-white hover:bg-zinc-700"
+          onClick={async () => {
+            if (address) {
+              await disconnectAsync();
+            } else {
+              connect({ connector: connectors[0] });
+            }
+          }}
         >
-          Connect Wallet
+          {address
+            ? `Connected as ${address.slice(0, 6)}...${address.slice(-4)}`
+            : "Connect Wallet"}
         </Button>
       </header>
 
@@ -116,8 +129,22 @@ export default function UnionCertificatePage() {
                   <p className="font-bold flex items-center gap-2">
                     The Other Half <span className="text-red-500">❤️</span>
                   </p>
-                  <Button className="bg-pink-500 hover:bg-pink-600 text-white mt-2">
-                    Connect Wallet to Sign
+                  <Button
+                    className="bg-pink-500 hover:bg-pink-600 text-white mt-2"
+                    onClick={async () => {
+                      if (address) {
+                        // await signUnion();
+                      } else {
+                        connect({ connector: connectors[0] });
+                      }
+                    }}
+                  >
+                    {!address
+                      ? "Connect Wallet to Sign"
+                      : union?.data?.unionProposeds[0].union.participants[0].toLowerCase() ===
+                        address?.toLowerCase()
+                      ? "Need The Other Half"
+                      : "Do You Accept?"}
                   </Button>
                 </div>
               </div>

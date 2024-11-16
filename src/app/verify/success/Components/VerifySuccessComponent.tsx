@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 
-export default function VerifySuccessPageComponent() {
+export default function VerifySuccessPageComponent({ isWife = false }) {
   const { address: walletAddress } = useAccount();
+  const { unionId } = useParams();
 
   console.log("walletAddressV", walletAddress);
   const router = useRouter();
@@ -65,7 +66,9 @@ export default function VerifySuccessPageComponent() {
         </div>
         <div className="flex justify-center mt-8">
           <Button
-            onClick={() => router.push("/noggles")}
+            onClick={() =>
+              router.push(isWife ? `/${unionId}/noggles` : "/noggles")
+            }
             className="w-1/3 ml-auto"
           >
             Dive Into the Fun

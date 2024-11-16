@@ -19,7 +19,7 @@ interface UnionByIdResult {
 }
 
 const graphQlUrl =
-  "https://api.studio.thegraph.com/query/48819/union-registry-2/version/latest";
+  "https://api.studio.thegraph.com/query/8787/union-registry-2/version/latest";
 
 export const useSubgraph = () => {
   const { address } = useAccount();

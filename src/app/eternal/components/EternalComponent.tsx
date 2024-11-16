@@ -63,9 +63,17 @@ export default function EternalPageComponent({ isWife = false }) {
                 }}
                 placeholder="Enter something meaningful (no spaces)"
               />
-              <div className="flex flex-center text-xs text-zinc-600">
-                Only letters, numbers, or symbols. No spaces allowed.
-              </div>
+              {!isWife && (
+                <div className="flex flex-center text-xs text-zinc-600">
+                  Only letters, numbers, or symbols. No spaces allowed.
+                </div>
+              )}
+              {/* ToDo: Add the logic to unlock the union */}
+              {isWife && (
+                <Button className="bg-red-500 flex justify-center mx-auto">
+                  Unlock the Union
+                </Button>
+              )}
             </div>
             {/* Bottom text with separator */}
             <div className="space-y-4">
@@ -84,29 +92,33 @@ export default function EternalPageComponent({ isWife = false }) {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-8">
-          <Button
-            className={`${isLoading ? "bg-red-300" : "bg-red-500"} text-white`}
-            onClick={async () => {
-              try {
-                setIsLoading(true);
-                await proposeUnion.mutateAsync({
-                  tokenId: selectedNoggle!,
-                  vow: vows,
-                  message: "I love you",
-                });
-                router.push("/proposal-done");
-              } catch (error) {
-                console.error(error);
-              } finally {
-                setIsLoading(false);
-              }
-            }}
-            disabled={isLoading}
-          >
-            Seal the Deal
-          </Button>
-        </div>
+        {!isWife && (
+          <div className="flex justify-center mt-8">
+            <Button
+              className={`${
+                isLoading ? "bg-red-300" : "bg-red-500"
+              } text-white`}
+              onClick={async () => {
+                try {
+                  setIsLoading(true);
+                  await proposeUnion.mutateAsync({
+                    tokenId: selectedNoggle!,
+                    vow: vows,
+                    message: "I love you",
+                  });
+                  router.push("/proposal-done");
+                } catch (error) {
+                  console.error(error);
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+              disabled={isLoading}
+            >
+              Seal the Deal
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -56,7 +56,7 @@ export default function UnionCertificatePage() {
               </h2>
               <div className="space-y-4">
                 <p className="whitespace-pre-wrap">
-                  {union?.data.unionProposeds[0].union.vows}
+                  {union?.data?.unionProposeds[0].union.vows}
                 </p>
               </div>
             </div>
@@ -75,13 +75,12 @@ export default function UnionCertificatePage() {
                 A Perfect Pair <span>💝</span>
               </h2>
               <div className="flex justify-center my-4">
-                <div className="relative border-4 border-black p-4 w-64 h-32">
+                <div className="relative border-4 border-black p-4 w-64 h-32 flex items-center justify-center">
                   <Image
-                    src="/placeholder.svg?height=100&width=200"
-                    alt="Union NFT Preview"
-                    width={200}
-                    height={100}
-                    className="object-contain"
+                    src={`/noggles/noogles-${union.data?.unionProposeds[0]?.union?.ringIds[0]}.png`}
+                    alt={`Noggle ${union.data?.unionProposeds[0]?.union?.ringIds[0]}`}
+                    width={256}
+                    height={256}
                   />
                 </div>
               </div>

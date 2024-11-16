@@ -103,7 +103,7 @@ function App() {
             <div className="relative h-16">
               <div className="absolute left-8 top-0">
                 <Image
-                  src="/placeholder.svg?height=32&width=32"
+                  src="/nouns/1.png"
                   alt="Sunglasses icon"
                   width={32}
                   height={32}
@@ -112,7 +112,7 @@ function App() {
               </div>
               <div className="absolute right-8 top-0">
                 <Image
-                  src="/placeholder.svg?height=32&width=32"
+                  src="/nouns/2.png"
                   alt="Pizza icon"
                   width={32}
                   height={32}
@@ -121,7 +121,7 @@ function App() {
               </div>
               <div className="absolute right-16 bottom-0">
                 <Image
-                  src="/placeholder.svg?height=32&width=32"
+                  src="/nouns/3.png"
                   alt="Music note"
                   width={32}
                   height={32}
@@ -130,7 +130,7 @@ function App() {
               </div>
               <div className="absolute left-16 bottom-0">
                 <Image
-                  src="/placeholder.svg?height=32&width=32"
+                  src="/nouns/4.png"
                   alt="Rose icon"
                   width={32}
                   height={32}

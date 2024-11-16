@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { usePrivadoChainStatus } from "@/hooks/usePrivado";
+import { PrivadoUrl } from "@/lib/privado";
 import Link from "next/link";
-import { useAccount } from "wagmi";
 
 export default function Component() {
-  const { address: walletAddress } = useAccount();
+  const privadoChain = usePrivadoChainStatus();
 
-  console.log("walletAddressV", walletAddress);
+  console.log("privadoChainStatus", privadoChain.data);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -45,7 +46,12 @@ export default function Component() {
 
             {/* Center button vertically */}
             <div className="flex-1 flex items-center justify-center">
-              <Button className="bg-pink-500 hover:bg-pink-600 text-white font-mono px-8 py-6 text-lg">
+              <Button
+                className="bg-pink-500 hover:bg-pink-600 text-white font-mono px-8 py-6 text-lg"
+                onClick={() => {
+                  window.open(PrivadoUrl, "_blank");
+                }}
+              >
                 Let's Do This →
               </Button>
             </div>

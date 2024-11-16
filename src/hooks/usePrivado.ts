@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 const contractAddress = "0xa43E985D7b5b66F4C2E172C92032A4Ad7d230652";
 const requestId = 101;
 
-export const usePrivadoChainStatus = ({ disable }: { disable: boolean }) => {
+export const usePrivadoChainStatus = () => {
   const { address } = useAccount();
   const publicClient = createPublicClient({
     chain: lineaSepolia,
@@ -14,7 +14,7 @@ export const usePrivadoChainStatus = ({ disable }: { disable: boolean }) => {
   });
   return useQuery({
     queryKey: ["isPrivadoVerified", address],
-    enabled: !disable && !!address,
+    enabled: !!address,
     queryFn: async () => {
       console.log("get privado state onchain");
       const abi = [

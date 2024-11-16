@@ -189,12 +189,12 @@ export default function UnionCertificatePage() {
         >
           Copy Certificate Link
         </Button>
-        <Button
+        {/* <Button
           variant="secondary"
           className="bg-zinc-800 text-white hover:bg-zinc-700"
         >
           View Contract Details <ExternalLink className="ml-2 h-4 w-4" />
-        </Button>
+        </Button> */}
       </footer>
     </div>
   );

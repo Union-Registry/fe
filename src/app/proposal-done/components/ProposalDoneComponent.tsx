@@ -122,24 +122,26 @@ export default function ProposalDoneComponent(params: {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-8">
-          <Button
-            className="bg-red-500 text-white"
-            onClick={async () =>
-              await proposeUnion
-                .mutateAsync({
-                  tokenId: selectedNoggle!,
-                  vow: vows,
-                  message: eternalToken,
-                })
-                .then((tx) => {
-                  router.push("/proposal-summary");
-                })
-            }
-          >
-            Seal the Deal
-          </Button>
-        </div>
+        {!isWife && (
+          <div className="flex justify-center mt-8">
+            <Button
+              className="bg-red-500 text-white"
+              onClick={async () =>
+                await proposeUnion
+                  .mutateAsync({
+                    tokenId: selectedNoggle!,
+                    vow: vows,
+                    message: eternalToken,
+                  })
+                  .then((tx) => {
+                    router.push("/proposal-summary");
+                  })
+              }
+            >
+              Seal the Deal
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );

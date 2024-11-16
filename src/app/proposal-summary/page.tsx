@@ -6,17 +6,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { useEffect } from "react";
-
 export default function Component() {
   const router = useRouter();
-  const { vows, setVows, selectedNoggle } = useUnion();
+  const { vows, selectedNoggle } = useUnion();
 
   useEffect(() => {
-    if (!selectedNoggle) {
-      router.push("/noggles");
+    if (!selectedNoggle || !vows) {
+      router.push("/vows");
     }
-  }, [vows, selectedNoggle]);
+  }, [selectedNoggle, vows]);
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -48,26 +48,26 @@ export default function Component() {
 
           {/* Content */}
           <div className="space-y-8 flex-1 flex flex-col">
-            <h2 className="font-mono text-2xl font-bold">
-              Write Your Heart Out!
-            </h2>
-
-            <div className="font-bold">Your Vows</div>
-            <div className="flex-1 flex items-center justify-center">
-              <Textarea
-                placeholder="Pour your heart out here..."
-                className="w-full h-56"
-                value={vows}
-                onChange={(e) => setVows(e.target.value)}
-              />
+            <div>
+              <div className="whitespace-pre-wrap">{vows}</div>
+              <div className="mx-auto w-64 mt-4 h-48 border-4 border-black flex items-center justify-center rounded-lg">
+                <Image
+                  src={`/noggles/noogles-${selectedNoggle}.png`}
+                  alt={`Noggle ${selectedNoggle}`}
+                  width={256}
+                  height={256}
+                />
+              </div>
             </div>
-
             {/* Bottom text with separator */}
             <div className="space-y-4">
               <div className="border-t-2 border-gray-200"></div>
               <p className="text-zinc-600 font-mono text-sm">
-                Share a special message to tell your partner and the world how
-                much your special someone means to you.{" "}
+                Take a moment to review your proposal. Make sure your vows and
+                nougles selection are just right. If you need to make any
+                changes, you can edit your vows or choose a different noggles.
+                Once you’re happy with everything, click Create Eternal Token →
+                to proceed.{" "}
               </p>
             </div>
           </div>

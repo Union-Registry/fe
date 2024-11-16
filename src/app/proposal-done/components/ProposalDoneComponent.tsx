@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 import { Button } from "@/components/ui/button";
 
@@ -9,13 +9,14 @@ import { useEffect } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
 import { useSubgraph } from "@/hooks/useSubgraph";
-export default function ProposalDoneComponent() {
+export default function ProposalDoneComponent({ isWife = false }) {
   const router = useRouter();
+  const { unionId } = useParams();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
   useEffect(() => {
     if (!selectedNoggle || !vows) {
-      router.push("/noggles");
+      router.push(isWife ? `/${unionId}/noggles` : "/noggles");
     }
   }, [selectedNoggle, vows]);
 

@@ -4,9 +4,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useUnion } from "@/context/UnionContext";
 
 export default function Component() {
   const router = useRouter();
+  const { vows, setVows } = useUnion();
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">
@@ -47,6 +49,8 @@ export default function Component() {
               <Textarea
                 placeholder="Pour your heart out here..."
                 className="w-full h-56"
+                value={vows}
+                onChange={(e) => setVows(e.target.value)}
               />
             </div>
 

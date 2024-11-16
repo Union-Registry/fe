@@ -5,6 +5,7 @@ import "./globals.css";
 import { config } from "@/config/wagmi";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { UnionProvider } from "@/context/UnionContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +33,7 @@ export default function RootLayout({
       >
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            {children}
+            <UnionProvider>{children}</UnionProvider>
           </QueryClientProvider>
         </WagmiProvider>
       </body>

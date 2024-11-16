@@ -7,10 +7,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useUnion } from "@/context/UnionContext";
 
 export default function NooglesPage() {
   const router = useRouter();
-  const [selectedNoggle, setSelectedNoggle] = useState<number | null>(null);
+  const { selectedNoggle, setSelectedNoggle } = useUnion();
 
   return (
     <div className="min-h-screen bg-[#f8f3f3] px-4 py-6">

@@ -35,7 +35,8 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  console.log("walletAddress", walletAddress);
   useEffect(() => {
     const initWeb3Auth = async () => {
       try {
@@ -119,6 +120,22 @@ function App() {
     initWeb3Auth();
   }, []);
 
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (provider && loggedIn) {
+        try {
+          const address = await getAccounts();
+          console.log("Address from useEffect:", address);
+          setWalletAddress(address);
+        } catch (error) {
+          console.error("Error fetching address:", error);
+        }
+      }
+    };
+
+    fetchAddress();
+  }, [provider, loggedIn]);
+
   const login = async () => {
     if (!web3auth) {
       setError("Web3Auth not initialized");
@@ -129,6 +146,7 @@ function App() {
       const web3authProvider = await web3auth.connect();
       setProvider(web3authProvider);
       setLoggedIn(true);
+
       setError(null);
     } catch (err) {
       console.error("Error during login:", err);
@@ -150,6 +168,7 @@ function App() {
       await web3auth.logout();
       setProvider(null);
       setLoggedIn(false);
+      setWalletAddress(null);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to logout");
@@ -192,6 +211,41 @@ function App() {
     }
   };
 
+  const getAccounts = async () => {
+    if (!provider) {
+      setError("Provider not initialized");
+      return;
+    }
+    try {
+      // First try with eth_accounts
+      const accounts = await provider.request({
+        method: "eth_accounts",
+      });
+
+      // If eth_accounts doesn't work, try with personal_accounts
+      if (!accounts || accounts.length === 0) {
+        const personalAccounts = await provider.request({
+          method: "personal_accounts",
+        });
+        return personalAccounts[0];
+      }
+
+      return accounts[0];
+    } catch (error) {
+      console.error("Error getting accounts:", error);
+      // Try alternative method using eth_requestAccounts
+      try {
+        const accounts = await provider.request({
+          method: "eth_requestAccounts",
+        });
+        return accounts[0];
+      } catch (secondError) {
+        console.error("Error with alternative method:", secondError);
+        throw secondError;
+      }
+    }
+  };
+
   if (isLoading) {
     return <div className="container">Loading...</div>;
   }
@@ -218,13 +272,20 @@ function App() {
           <div className="w-8 h-8 bg-pink-500"></div>
           <span className="font-mono font-bold">Union Registry</span>
         </div>
-        <Button
-          variant="secondary"
-          className="bg-zinc-800 text-white hover:bg-zinc-700"
-          onClick={loggedIn ? logout : login}
-        >
-          {loggedIn ? "Disconnect Wallet" : "Connect Wallet"}
-        </Button>
+        <div className="flex items-center gap-4">
+          {walletAddress && (
+            <span className="font-mono text-sm">
+              {`${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`}
+            </span>
+          )}
+          <Button
+            variant="secondary"
+            className="bg-zinc-800 text-white hover:bg-zinc-700"
+            onClick={loggedIn ? logout : login}
+          >
+            {loggedIn ? "Disconnect Wallet" : "Connect Wallet"}
+          </Button>
+        </div>
       </header>
 
       {/* Main Content */}

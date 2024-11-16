@@ -2,7 +2,6 @@
 
 import localFont from "next/font/local";
 import "./globals.css";
-import { WalletProvider } from "@/context/WalletContext";
 import { config } from "@/config/wagmi";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,7 +32,7 @@ export default function RootLayout({
       >
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            <WalletProvider>{children}</WalletProvider>
+            {children}
           </QueryClientProvider>
         </WagmiProvider>
       </body>

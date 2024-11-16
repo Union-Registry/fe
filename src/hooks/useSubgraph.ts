@@ -83,7 +83,6 @@ export const useSubgraph = () => {
           document: unionByIdQuery,
           variables: { unionId: Number(unionId) },
         });
-        console.log("result", result);
         return result;
       },
       enabled: !!unionId,

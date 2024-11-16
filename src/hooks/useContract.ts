@@ -56,7 +56,17 @@ export const useCivilRegistryContract = () => {
     },
   });
 
+  const unionSecret = (unionId: number) => {
+    return useQuery({
+      queryKey: ["unionSecret", unionId],
+      queryFn: async () => {
+        return await contract.read.unions([unionId]);
+      },
+    });
+  };
+
   return {
+    contract,
     proposeUnion,
     acceptUnion,
   };

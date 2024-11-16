@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { Toaster } from "sonner";
 
 function App() {
   // const { walletAddress, isLoading, login, logout, isLoggedIn } = useWallet();

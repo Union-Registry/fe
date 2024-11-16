@@ -1,17 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useUnion } from "@/context/UnionContext";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useCivilRegistryContract } from "@/hooks/useContract";
 import { Input } from "@/components/ui/input";
+import { useSubgraph } from "@/hooks/useSubgraph";
+import { useUnionSecret } from "@/hooks/useUnionSecret";
+import { keccak256, toHex } from "viem";
+import { toast } from "sonner";
 export default function EternalPageComponent({ isWife = false }) {
   const router = useRouter();
   const { vows, selectedNoggle, eternalToken, setEternalToken } = useUnion();
   const { proposeUnion } = useCivilRegistryContract();
   const [isLoading, setIsLoading] = useState(false);
+  const unionId = useParams().unionId;
+  const { useUnionById } = useSubgraph();
+  const unionByIdResult = useUnionById(unionId as string) || [];
+  const { data: unionSecret } = useUnionSecret(+(unionId as string));
+
+  const handleUnlockUnion = async () => {
+    const union = unionByIdResult.data?.unionProposeds[0];
+    if (union) {
+      const messageHash = keccak256(toHex(eternalToken));
+      console.log({
+        eternalToken,
+        messageHash,
+        unionSecret,
+      });
+      if (messageHash === unionSecret) {
+        toast.success("Union unlocked!");
+      } else {
+        toast.error("Invalid Eternal Token");
+      }
+    }
+  };
   useEffect(() => {
     if (!isWife) {
       if (!selectedNoggle || !vows) {
@@ -70,7 +95,10 @@ export default function EternalPageComponent({ isWife = false }) {
               )}
               {/* ToDo: Add the logic to unlock the union */}
               {isWife && (
-                <Button className="bg-red-500 flex justify-center mx-auto">
+                <Button
+                  className="bg-red-500 flex justify-center mx-auto"
+                  onClick={handleUnlockUnion}
+                >
                   Unlock the Union
                 </Button>
               )}
@@ -104,7 +132,7 @@ export default function EternalPageComponent({ isWife = false }) {
                   await proposeUnion.mutateAsync({
                     tokenId: selectedNoggle!,
                     vow: vows,
-                    message: "I love you",
+                    message: eternalToken,
                   });
                   router.push("/proposal-done");
                 } catch (error) {

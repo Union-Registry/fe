@@ -14,6 +14,10 @@ interface UnionProposed {
   };
 }
 
+interface UnionByIdResult {
+  unionProposeds: UnionProposed[];
+}
+
 const graphQlUrl =
   "https://api.studio.thegraph.com/query/48819/union-registry-2/version/latest";
 
@@ -69,18 +73,17 @@ export const useSubgraph = () => {
     enabled: !!address,
   });
 
-  const useUnionById = (
-    unionId: string
-  ): QueryObserverResult<{ unionProposeds: UnionProposed[] }, unknown> => {
-    return useQuery({
+  const useUnionById = (unionId: string) => {
+    return useQuery<UnionByIdResult>({
       queryKey: ["union", unionId],
       staleTime: 10 * 1000,
       queryFn: async () => {
-        const result = await request({
+        const result = await request<UnionByIdResult>({
           url: graphQlUrl,
           document: unionByIdQuery,
           variables: { unionId: Number(unionId) },
         });
+        console.log("result", result);
         return result;
       },
       enabled: !!unionId,
